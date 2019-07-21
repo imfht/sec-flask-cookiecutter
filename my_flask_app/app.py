@@ -14,13 +14,12 @@ from my_flask_app.extensions import (
     debug_toolbar,
     login_manager,
     migrate,
-    webpack,
-)
+    webpack, api)
+from my_flask_app.user.models import Domain
 
 
 def create_app(config_object="my_flask_app.settings"):
     """Create application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
-
     :param config_object: The configuration object to use.
     """
     app = Flask(__name__.split(".")[0])
@@ -36,6 +35,7 @@ def create_app(config_object="my_flask_app.settings"):
 
 def register_extensions(app):
     """Register Flask extensions."""
+
     bcrypt.init_app(app)
     cache.init_app(app)
     db.init_app(app)
@@ -44,6 +44,7 @@ def register_extensions(app):
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
     webpack.init_app(app)
+    api.init_app(app=app, flask_sqlalchemy_db=db)
     return None
 
 
@@ -51,6 +52,7 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
+    api.create_api(Domain, app=app, include_columns=['id', 'domain'])
     return None
 
 

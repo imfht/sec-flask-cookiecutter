@@ -79,7 +79,7 @@ class Domain(SurrogatePK, Model):
     description = Column(db.Text, nullable=True)
     user_id = reference_col('users', nullable=False)
 
-    user = relationship("User", backref="domains")
+    user = relationship("User", backref="domains", lazy=True)
 
     @property
     def title(self):

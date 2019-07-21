@@ -4,6 +4,17 @@ My Flask App
 
 A flasky app.
 
+-------
+Appended
+
+deploy a spider
+
+cd spider && scrapyd-deploy default
+
+then
+
+curl http://localhost:6800/schedule.json -d project=spider -d spider=quotes
+
 
 Quickstart
 ----------
