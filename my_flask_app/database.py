@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Database module, including the SQLAlchemy database object and DB-related utilities."""
+from datetime import datetime
+
 from .compat import basestring
 from .extensions import db
 
@@ -50,22 +52,24 @@ class SurrogatePK(object):
     __table_args__ = {"extend_existing": True}
 
     id = Column(db.Integer, primary_key=True)
+    add_time = Column(db.Time, default=datetime.now)
+    update_time = Column(db.Time, default=datetime.now, onupdate=datetime.now)
 
     @classmethod
     def get_by_id(cls, record_id):
         """Get record by ID."""
         if any(
-            (
-                isinstance(record_id, basestring) and record_id.isdigit(),
-                isinstance(record_id, (int, float)),
-            )
+                (
+                        isinstance(record_id, basestring) and record_id.isdigit(),
+                        isinstance(record_id, (int, float)),
+                )
         ):
             return cls.query.get(int(record_id))
         return None
 
 
 def reference_col(
-    tablename, nullable=False, pk_name="id", foreign_key_kwargs=None, column_kwargs=None
+        tablename, nullable=False, pk_name="id", foreign_key_kwargs=None, column_kwargs=None
 ):
     """Column that adds primary key foreign key reference.
 

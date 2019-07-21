@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <h1>添加域名</h1>
+        <form id="domainForm" class="form form-register" method="POST" action="" role="form">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.domain.label }}
+                {{ form.domain(placeholder="域名", class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.desc.label }}
+                {{ form.desc(placeholder="描述", class_="form-control") }}
+            </div>
+            <p><input class="btn btn-primary" type="submit" value="添加域名"></p>
+        </form>
+    </div>
+{% endblock %}
+

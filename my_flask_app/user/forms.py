@@ -2,7 +2,7 @@
 """User forms."""
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Email, EqualTo, Length, URL
 
 from .models import User
 
@@ -43,3 +43,9 @@ class RegisterForm(FlaskForm):
             self.email.errors.append("Email already registered")
             return False
         return True
+
+
+class DomainForm(FlaskForm):
+    """domain form. """
+    domain = StringField("域名", validators=[URL()])
+    desc = StringField("描述")

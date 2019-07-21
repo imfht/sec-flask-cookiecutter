@@ -70,3 +70,37 @@ class User(UserMixin, SurrogatePK, Model):
     def __repr__(self):
         """Represent instance as a unique string."""
         return "<User({username!r})>".format(username=self.username)
+
+
+class Domain(SurrogatePK, Model):
+    """one domain(actually is an url.)"""
+    __tablename__ = "domains"
+    domain = Column(db.String(255), nullable=False)
+    description = Column(db.Text, nullable=True)
+    user_id = reference_col('users', nullable=False)
+
+    user = relationship("User", backref="domains")
+
+    @property
+    def title(self):
+        if self.history:
+            return self.history[0].title if self.history[0].title else "空标题"
+        else:
+            return "没有抓取记录"
+
+    @property
+    def fetch_time(self):
+        if self.history:
+            return self.history[0].add_time
+        else:
+            return "没有抓取记录"
+
+
+class FetchRecord(SurrogatePK, Model):
+    """fetch record of domain"""
+    __tablename__ = 'fetch_records'
+    domain_id = reference_col("domains", nullable=False)
+    title = Column(db.Text, nullable=True)
+    headers = Column(db.Text, nullable=True)
+    body = Column(db.Text, nullable=True)
+    domain = relationship("Domain", backref="history", order_by='FetchRecord.add_time')
